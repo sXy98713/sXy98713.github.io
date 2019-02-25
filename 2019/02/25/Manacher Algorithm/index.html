@@ -79,17 +79,22 @@
 
 
 
-<meta name="description" content="[Leetcode][19.2.4]3.Longes Substring Without Repeating CharactersGiven a string, find the length of the longest substring without repeating characters.Example 1: Input: “abcabcbb”Output: 3Explanation:">
+<meta name="description" content="#Manacher’s Algorithm(马拉车算法)马拉车算法是用来查找字符串最长回文子串的线性方法,该算法十分巧妙地将时间复杂度降低到了$O(n)$ ##1.算法原理：首先Manacher算法巧妙地通过添加字符将长度为奇数的回文串与长度为偶数的回文串一起考虑，具体做法为:在原字符串的每个相邻两个字符中插入一个分隔符，并在首尾也各自增加一个分隔符，举例如下:经过转换的字符串T[i]不影响原字符">
 <meta property="og:type" content="article">
-<meta property="og:title" content="leetcode(19.2.4)">
-<meta property="og:url" content="http://yoursite.com/2019/02/14/leetcode 3/index.html">
+<meta property="og:title" content="Manacher&#39;s Algorithm">
+<meta property="og:url" content="http://yoursite.com/2019/02/25/Manacher Algorithm/index.html">
 <meta property="og:site_name" content="sXy&#39;s Blog">
-<meta property="og:description" content="[Leetcode][19.2.4]3.Longes Substring Without Repeating CharactersGiven a string, find the length of the longest substring without repeating characters.Example 1: Input: “abcabcbb”Output: 3Explanation:">
+<meta property="og:description" content="#Manacher’s Algorithm(马拉车算法)马拉车算法是用来查找字符串最长回文子串的线性方法,该算法十分巧妙地将时间复杂度降低到了$O(n)$ ##1.算法原理：首先Manacher算法巧妙地通过添加字符将长度为奇数的回文串与长度为偶数的回文串一起考虑，具体做法为:在原字符串的每个相邻两个字符中插入一个分隔符，并在首尾也各自增加一个分隔符，举例如下:经过转换的字符串T[i]不影响原字符">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-14T10:16:13.405Z">
+<meta property="og:image" content="https://img-blog.csdn.net/20141221160146166">
+<meta property="og:image" content="https://img-blog.csdn.net/20141221160212654">
+<meta property="og:image" content="https://img-blog.csdn.net/20141221160232375">
+<meta property="og:image" content="https://img-blog.csdn.net/20141221160247614">
+<meta property="og:updated_time" content="2019-02-25T11:21:04.928Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="leetcode(19.2.4)">
-<meta name="twitter:description" content="[Leetcode][19.2.4]3.Longes Substring Without Repeating CharactersGiven a string, find the length of the longest substring without repeating characters.Example 1: Input: “abcabcbb”Output: 3Explanation:">
+<meta name="twitter:title" content="Manacher&#39;s Algorithm">
+<meta name="twitter:description" content="#Manacher’s Algorithm(马拉车算法)马拉车算法是用来查找字符串最长回文子串的线性方法,该算法十分巧妙地将时间复杂度降低到了$O(n)$ ##1.算法原理：首先Manacher算法巧妙地通过添加字符将长度为奇数的回文串与长度为偶数的回文串一起考虑，具体做法为:在原字符串的每个相邻两个字符中插入一个分隔符，并在首尾也各自增加一个分隔符，举例如下:经过转换的字符串T[i]不影响原字符">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20141221160146166">
 
 
 
@@ -119,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/02/14/leetcode 3/">
+  <link rel="canonical" href="http://yoursite.com/2019/02/25/Manacher Algorithm/">
 
 
 
 
 
-  <title>leetcode(19.2.4) | sXy's Blog</title>
+  <title>Manacher's Algorithm | sXy's Blog</title>
   
 
 
@@ -262,7 +267,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/14/leetcode 3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/25/Manacher Algorithm/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="sXy">
@@ -279,7 +284,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">leetcode(19.2.4)</h1>
+          <h1 class="post-title" itemprop="name headline">Manacher's Algorithm</h1>
         
 
         <div class="post-meta">
@@ -291,8 +296,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-14T18:16:13+08:00">
-                2019-02-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-25T19:21:04+08:00">
+                2019-02-25
               </time>
             
 
@@ -329,20 +334,9 @@
       
 
       
-        <h1 id="Leetcode-19-2-4"><a href="#Leetcode-19-2-4" class="headerlink" title="[Leetcode][19.2.4]"></a>[Leetcode][19.2.4]</h1><h2 id="3-Longes-Substring-Without-Repeating-Characters"><a href="#3-Longes-Substring-Without-Repeating-Characters" class="headerlink" title="3.Longes Substring Without Repeating Characters"></a>3.Longes Substring Without Repeating Characters</h2><h3 id="Given-a-string-find-the-length-of-the-longest-substring-without-repeating-characters"><a href="#Given-a-string-find-the-length-of-the-longest-substring-without-repeating-characters" class="headerlink" title="Given a string, find the length of the longest substring without repeating characters."></a>Given a string, find the length of the longest substring without repeating characters.</h3><h3 id="Example-1"><a href="#Example-1" class="headerlink" title="Example 1:"></a>Example 1:</h3><blockquote>
-<p>Input: “abcabcbb”<br>Output: 3<br>Explanation: The answer is “abc”, with the length of 3. </p>
-</blockquote>
-<h3 id="Example-2"><a href="#Example-2" class="headerlink" title="Example 2:"></a>Example 2:</h3><blockquote>
-<p>Input: “bbbbb”<br>Output: 1<br>Explanation: The answer is “b”, with the length of 1.</p>
-</blockquote>
-<h3 id="Example-3"><a href="#Example-3" class="headerlink" title="Example 3:"></a>Example 3:</h3><blockquote>
-<p>Input: “pwwkew”<br>Output: 3</p>
-</blockquote>
-<p><strong>Explanation: The answer is “wke”, with the length of 3.<br>Note that the answer must be a substring, “pwke” is a subsequence and not a substring.</strong><br><strong>题解：</strong></p>
-<blockquote>
-<p>根据题意，要求根据输入字符串获得没有重复字符的最大连续子串(substring),可以考虑一个滑动窗口，设窗口右端为left,左端为当前位置，同时维护一个大小为128的哈希表，表示每一个键盘输入的字符最近出现的位置。当前指针不断向前移动，比较指针所指字符最近出现位置与left的大小，比left大则更新left，比left小则继续向前。维护一个res,记录并更新每次出现过的窗口大小，最终得到的值即为最长substring的长度。</p>
-</blockquote>
-<p><strong>代码：</strong><br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>&#123;</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lengthOfLongestSubstrings</span><span class="params">(<span class="built_in">string</span> s)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; m(<span class="number">128</span>,<span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, left = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; s.size(); i++)</span><br><span class="line">        &#123;</span><br><span class="line">            left = max(left, m[s[i]]);</span><br><span class="line">            m[s[i]] = i;</span><br><span class="line">            res = max(res, i - left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+        <p>#Manacher’s Algorithm(马拉车算法)<br>马拉车算法是用来查找字符串最长回文子串的<strong>线性方法</strong>,该算法十分巧妙地将时间复杂度降低到了$O(n)$</p>
+<p>##1.算法原理：<br>首先Manacher算法巧妙地通过添加字符将长度为奇数的回文串与长度为偶数的回文串一起考虑，具体做法为:<br><strong>在原字符串的每个相邻两个字符中插入一个分隔符，并在首尾也各自增加一个分隔符，</strong><br>举例如下:<br><img src="https://img-blog.csdn.net/20141221160146166" alt=""><br>经过转换的字符串T[i]不影响原字符串S[i]中回文串的性质。<br>Manacher算法关键在于其维护的辅助数组Len[i],其含义是以字符T[i]为中心的最长回文子串的<strong>最右字符</strong>到T[i]的长度，假设以T[i]为中心的最长回文子串是T[l,r],则$Len[i] = r - i + 1$。<br>可以证明:<strong>$Len[i] - 1$即为以T[i]在原字符串中的长度</strong>。<br>证明如下:<br>观察字符串T,对于以T[i]为中心的最长回文子串，其长度为$2 * Len[i] -1$,同时可以发现，T中所有的回文子串，其中分隔符#的数量必比字符数量多1，即每个回文子串必有$Len[i]个分隔符和Len[i]<br>-1$个字符，因此该回文串在原字符串中的长度为$Len[i]-1$。因此根据性质，只要求出Len[i]，即可得到最长回文子串。<br>从字符串左端出发，依次计算Len[i]，则当计算到Len[i]时，Len<a href="0 &lt;= j &lt; i">j</a>已知。维护变量P为之前以计算最长回文子串右端点的最大值，同时记录该子串中心位置坐标Po，要求Len[i],则可以考虑以下情况:</p>
+<p>(1)$i &lt;= P$:<br>考虑i相对Po的对称位置j,如图:<br><img src="https://img-blog.csdn.net/20141221160212654" alt=""><br>由图可知：以j为中心的回文串一定在以Po为中心的回文串的内部，且i，j关于Po对称，由回文串定义及对称性可知，<br>当Len[j] &lt; P - i; Len[i] == Len[j]<br>而当Len[j] &gt;= P - i时，如图:<br><img src="https://img-blog.csdn.net/20141221160232375" alt=""><br>由图知当Len[j] &gt;= P,则以i为中心的回文串可能会延伸到P之外，可以从P + 1开始一个一个进行匹配，直至发生失配。<br>(2)$i &gt; P$:<br>若i &gt; P,如图，说明以i为中心的回文串尚未匹配，此时需要一个一个从头开始匹配直至失配。<br><img src="https://img-blog.csdn.net/20141221160247614" alt=""><br><strong>代码</strong>:<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">longestPalindrome</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">       <span class="built_in">string</span> t = <span class="string">"$#"</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.size(); ++i) &#123;</span><br><span class="line">            t += s[i];</span><br><span class="line">            t += <span class="string">"#"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// Process t</span></span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; p(t.size(), <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">int</span> mx = <span class="number">0</span>, id = <span class="number">0</span>, resLen = <span class="number">0</span>, resCenter = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; t.size(); ++i) &#123;</span><br><span class="line">            p[i] = mx &gt; i ? min(p[<span class="number">2</span> * id - i], mx - i) : <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">while</span> (t[i + p[i]] == t[i - p[i]]) ++p[i];</span><br><span class="line">            <span class="keyword">if</span> (mx &lt; i + p[i]) &#123;</span><br><span class="line">                mx = i + p[i];</span><br><span class="line">                id = i;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (resLen &lt; p[i]) &#123;</span><br><span class="line">                resLen = p[i];</span><br><span class="line">                resCenter = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s.substr((resCenter - resLen) / <span class="number">2</span>, resLen - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -367,8 +361,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/27/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2019/02/25/leetcode 5/" rel="next" title="leetcode(19.2.24)">
+                <i class="fa fa-chevron-left"></i> leetcode(19.2.24)
               </a>
             
           </div>
@@ -376,10 +370,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/02/25/leetcode 5/" rel="prev" title="leetcode(19.2.24)">
-                leetcode(19.2.24) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -431,17 +421,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -495,22 +476,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Leetcode-19-2-4"><span class="nav-number">1.</span> <span class="nav-text">[Leetcode][19.2.4]</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Longes-Substring-Without-Repeating-Characters"><span class="nav-number">1.1.</span> <span class="nav-text">3.Longes Substring Without Repeating Characters</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Given-a-string-find-the-length-of-the-longest-substring-without-repeating-characters"><span class="nav-number">1.1.1.</span> <span class="nav-text">Given a string, find the length of the longest substring without repeating characters.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example-1"><span class="nav-number">1.1.2.</span> <span class="nav-text">Example 1:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example-2"><span class="nav-number">1.1.3.</span> <span class="nav-text">Example 2:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example-3"><span class="nav-number">1.1.4.</span> <span class="nav-text">Example 3:</span></a></li></ol></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
