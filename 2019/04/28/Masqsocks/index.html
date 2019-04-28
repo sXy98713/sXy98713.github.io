@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<script>
+    (function(){
+        if(''){
+            if(prompt('请输入文章密码')!== ''){
+                alert('密码错误!');
+                history.back();
+            }
+        }    
+    })();
+</script>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="基于asyncio的socks代理（网路工程大作业）题目 作业思路&amp;#160;&amp;#160;&amp;#160;&amp;#160;根据题目，需要先去了解Socks5协议以及asyncio。 asyncio参考官方文档:https://docs.python.org/3/library/asyncio-stream.html Socks5协议Socks5协议是一个代理协议，旨在为位于Intranet防火墙后的用户提">
+<meta name="keywords" content="python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Masqsocks">
+<meta property="og:url" content="http://yoursite.com/2019/04/28/Masqsocks/index.html">
+<meta property="og:site_name" content="sXy&#39;s Blog">
+<meta property="og:description" content="基于asyncio的socks代理（网路工程大作业）题目 作业思路&amp;#160;&amp;#160;&amp;#160;&amp;#160;根据题目，需要先去了解Socks5协议以及asyncio。 asyncio参考官方文档:https://docs.python.org/3/library/asyncio-stream.html Socks5协议Socks5协议是一个代理协议，旨在为位于Intranet防火墙后的用户提">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/04/28/Masqsocks/选区_075.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/28/Masqsocks/选区_078.png">
+<meta property="og:updated_time" content="2019-04-28T08:17:41.968Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Masqsocks">
+<meta name="twitter:description" content="基于asyncio的socks代理（网路工程大作业）题目 作业思路&amp;#160;&amp;#160;&amp;#160;&amp;#160;根据题目，需要先去了解Socks5协议以及asyncio。 asyncio参考官方文档:https://docs.python.org/3/library/asyncio-stream.html Socks5协议Socks5协议是一个代理协议，旨在为位于Intranet防火墙后的用户提">
+<meta name="twitter:image" content="http://yoursite.com/2019/04/28/Masqsocks/选区_075.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/28/Masqsocks/">
+
+
+
+
+
+  <title>Masqsocks | sXy's Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">sXy's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/28/Masqsocks/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sXy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/timg.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sXy's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Masqsocks</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-28T16:13:56+08:00">
+                2019-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="基于asyncio的socks代理（网路工程大作业）"><a href="#基于asyncio的socks代理（网路工程大作业）" class="headerlink" title="基于asyncio的socks代理（网路工程大作业）"></a>基于asyncio的socks代理（网路工程大作业）</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><img src="/2019/04/28/Masqsocks/选区_075.png" alt=""></p>
+<h2 id="作业思路"><a href="#作业思路" class="headerlink" title="作业思路"></a>作业思路</h2><p>&#160;&#160;&#160;&#160;根据题目，需要先去了解<strong>Socks5协议</strong>以及<strong>asyncio</strong>。</p>
+<h3 id="asyncio"><a href="#asyncio" class="headerlink" title="asyncio"></a>asyncio</h3><p>参考官方文档:<br><a href="https://docs.python.org/3/library/asyncio-stream.html" target="_blank" rel="noopener">https://docs.python.org/3/library/asyncio-stream.html</a></p>
+<h3 id="Socks5协议"><a href="#Socks5协议" class="headerlink" title="Socks5协议"></a>Socks5协议</h3><p>Socks5协议是一个<strong>代理</strong>协议，旨在为位于Intranet防火墙后的用户提供访问Intranet的代理服务。</p>
+<h4 id="关于代理"><a href="#关于代理" class="headerlink" title="关于代理"></a>关于代理</h4><p>根据<strong>HTTP1.1</strong>的定义：</p>
+<blockquote>
+<p>An intermediary program which acts as both a server and a client for the purpose of making requests on behalf of other clients. Requests are serviced internally or by passing them on, with possible translation, to other servers.</p>
+</blockquote>
+<p>代理即<strong>中间人</strong>，同时满足C/S双方的规范，<strong>一人分饰两角</strong>，目标服务器眼中的客户端，真正客户端眼中的服务器。当其对两端传输的数据加以修改，则为<strong>非透明代理</strong>,反之为<strong>透明代理</strong>。</p>
+<h4 id="协议流程"><a href="#协议流程" class="headerlink" title="协议流程"></a>协议流程</h4><h5 id="1、认证"><a href="#1、认证" class="headerlink" title="1、认证"></a>1、认证</h5><h6 id="认证方法："><a href="#认证方法：" class="headerlink" title="认证方法："></a>认证方法：</h6><ul>
+<li>0x00: No AUTHENTICATION  </li>
+<li>0x01: GSSAPI</li>
+<li>0x02: USERNAME/PASWWORD</li>
+<li>0X03: to X’7F’ IANA ASSIGNED</li>
+<li>0x80: to X’FE’ RESERVED FOR PRIVATE METHODS</li>
+<li>0XFF: NO ACCEPTABLE METHODS</li>
+</ul>
+<p>1.1、客户端 -&gt; 代理服务器，请求认证：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>版本号（1字节）</th>
+<th>可供选认证方法（1字节）</th>
+<th>选择的方法（1-255字节）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>固定为5</td>
+<td>选了多少种</td>
+<td>即上表中的方法</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>1.2、代理服务器 -&gt; 客户端，响应认证：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>版本号(1字节)</th>
+<th>确认认证的方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>固定为5</td>
+<td>0x00:　无需客户端发送进一步认证信息<br> 0x01:　需要客户端进一步认证<br> 0xFF:  相当于拒绝请求，客户端只能关闭连接</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h5 id="2、请求信息"><a href="#2、请求信息" class="headerlink" title="2、请求信息"></a>2、请求信息</h5><p>2.1、客户端 -&gt; 代理服务器，发送目标信息：<br>版本号(1字节) | 命令(1字节) | 保留(1字节) | 请求类型(1字节) | 地址(不定长) | 端口(2字节)<br>—-         | —-        | —-        | —-           |  —-       | —-<br>固定为５　　 | 0x01: CONNECT<br>0x02: BIND<br>0x03:UDP ASSOCIATE | 固定为0x00 | 0x01: IPV4地址<br>0x03: 域名<br>0x04: IPV6地址| 若请求类型是域名，第１个字节为域名长度 |</p>
+<p>其中：</p>
+<ul>
+<li>CONNECT: 用于客户端请求服务器进行代理</li>
+<li>BIND: 用于客户端向服务器上报自己的反向连接监听地址（如应用于FTP下载，客户端需要接受来自服务器的连接</li>
+<li>UDP ASSOCIATE: 用于请求建立到UDP数据报中继的连接</li>
+</ul>
+<p>2.2、代理服务器 -&gt; 客户端,确认连接：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>版本号(1字节)　</th>
+<th>　确认回应(1字节)</th>
+<th>保留(1字节)</th>
+<th>响应类型（１字节)</th>
+<th>地址(不定长)</th>
+<th>端口(2字节)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>固定为５</td>
+<td>0x00: succeeded<br>0x01: general SOCKS server failure<br>0x02:connection not allowed by ruleset<br>0x03: Network unreachable<br>0x04: Host unreachable<br>0x05: Connection refused<br>0x06: TTL expired<br>0x07: Command not supported<br>0x08: Address type not supported<br>0x09: to X’FF’unassigned</td>
+<td>固定为0x00</td>
+<td>仅用于响应客户端BIND命令:<br>0x01: IPV4地址<br>0x03: 域名<br>0x04: IPV6地址</td>
+<td>仅用于响应客户端BIND命令：如果请求类型是域名，第一个字节为域名长度</td>
+<td>仅用于响应客户端BIND命令</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>此时SOCKS5协议协商部分已完成，之后便进入数据传输阶段。</p>
+<p>握手建立连接代码（remote端）：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">handleConn</span><span class="params">(remoter: Connection)</span>:</span></span><br><span class="line">    <span class="comment">#解析socks协议</span></span><br><span class="line">    data = <span class="keyword">await</span> remoter.readexactly(<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> data <span class="keyword">or</span> data[<span class="number">0</span>] != <span class="number">0x05</span>:</span><br><span class="line">        <span class="keyword">await</span> remoter.close()</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">await</span> remoter.write(remoter.encode(<span class="string">b'\x05\x00'</span>))</span><br><span class="line">        buf = <span class="keyword">await</span> remoter.readfromlocal()</span><br><span class="line">        <span class="comment">#print(data)</span></span><br><span class="line">        <span class="comment">#print(buf)</span></span><br><span class="line">        print(len(buf))</span><br><span class="line">        <span class="keyword">if</span> len(buf) &lt; <span class="number">7</span>:</span><br><span class="line">            <span class="keyword">await</span> remoter.close()</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">if</span> buf[<span class="number">1</span>] != <span class="number">0x01</span>:</span><br><span class="line">            <span class="comment">#Only support CONNECT</span></span><br><span class="line">            <span class="keyword">await</span> remoter.close()</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        dstip = <span class="keyword">None</span></span><br><span class="line">        dstport = buf[<span class="number">-2</span>:]</span><br><span class="line">        dstport = int(dstport.hex(), <span class="number">16</span>)</span><br><span class="line">        <span class="keyword">if</span> buf[<span class="number">3</span>] == <span class="number">0x01</span>:</span><br><span class="line">            <span class="comment">#IPV4</span></span><br><span class="line">            dstip = socket.inet_ntop(socket.AF_INET, buf[<span class="number">4</span>: <span class="number">4</span> + <span class="number">4</span>])</span><br><span class="line">        <span class="keyword">elif</span> buf[<span class="number">3</span>] == <span class="number">0x03</span>:</span><br><span class="line">            <span class="comment">#域名(地址第一个字节为域名长度)</span></span><br><span class="line">            hostlen = int.from_bytes(buf[<span class="number">4</span>], byteorder = <span class="string">'little'</span>)</span><br><span class="line">            host = buf[<span class="number">5</span>:<span class="number">5</span> + hostlen]</span><br><span class="line">            dstip = socket.gethostbyname(host)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment">#IPV6</span></span><br><span class="line">            dstip = buf[<span class="number">4</span>: <span class="number">4</span> + <span class="number">16</span>]</span><br><span class="line">        <span class="comment">#addr = &#123;dstip, dstport)</span></span><br><span class="line">        <span class="comment">#print("connect to &#123;addr&#125;")</span></span><br><span class="line">        <span class="keyword">await</span> remoter.write(remoter.encode(<span class="string">b'\x05\x00\x00\x01\x00\x00\x00\x00\x00\x00'</span>))</span><br><span class="line">        dst_reader, dst_writer = <span class="keyword">await</span> asyncio.open_connection(dstip, dstport)</span><br><span class="line">        dst = Connection(dst_reader, dst_writer)</span><br><span class="line">        <span class="keyword">return</span> dst</span><br></pre></td></tr></table></figure></p>
+<h3 id="Socks5协议在本作业中的应用"><a href="#Socks5协议在本作业中的应用" class="headerlink" title="Socks5协议在本作业中的应用"></a>Socks5协议在本作业中的应用</h3><p>当了解了整个Socks5协议的握手过程后，便可以结合题目要求，得到如下图：  </p>
+<p><img src="/2019/04/28/Masqsocks/选区_078.png" alt=""></p>
+<p>即：</p>
+<ul>
+<li><strong>本地客户端</strong>向本地代理服务器(<strong>ML</strong>)发送真实数据，ML得到数据后经过处理再转发给远程代理服务器(<strong>MR</strong>)；</li>
+<li><strong>ＭL</strong>得到数据后再经过处理将真实数据转发给<strong>目标服务器</strong>；</li>
+<li><strong>目标服务器</strong>收到请求，返回响应数据给<strong>MR</strong>，<strong>MR</strong>经过处理发送给<strong>ML</strong>；</li>
+<li><strong>ML</strong>对收到数据进行处理，将真正的响应数据返回给<strong>本地客户端</strong>，至此完成一次完整的数据交互。</li>
+</ul>
+<p>接下来只需要使ML与MR之间交互的数据能够伪装成为HTTP/FTP/POP3/SMTP并得以通过流量分析软件即可。在本次作业中我选择了HTTP伪装。</p>
+<h3 id="HTTP伪装"><a href="#HTTP伪装" class="headerlink" title="HTTP伪装"></a>HTTP伪装</h3><p>基于asyncio的简单HTTP伪装较容易实现：</p>
+<ul>
+<li><strong>ML</strong>得到真实数据后添加固定长度<strong>len1</strong>的HTTP包头以及数据本身长度<strong>len(msg)</strong>，则所添加的总长度<strong>len</strong>为<strong>len1 + len(len(msg))</strong>；</li>
+<li><strong>MR</strong>通过<strong>len1</strong>，<strong>len</strong>，<strong>len(msg)</strong>　来读取真实数据并过滤掉HTTP报头，此时便可以直接转发给目标服务器。</li>
+</ul>
+<p>在此基础上还可以在将HTTP报头分为请求头与响应头，分别由两端服务器添加或过滤，同时也可以对真实数据进行简单的加/解密。</p>
+<p>HTTP伪装代码:</p>
+<p>加头：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encode</span><span class="params">(self, data)</span>:</span></span><br><span class="line">    <span class="comment">#加头</span></span><br><span class="line">    b_len = len(data).to_bytes((len(data).bit_length() + <span class="number">7</span>) // <span class="number">8</span>, byteorder=<span class="string">'little'</span>)</span><br><span class="line">    msg = self.header + b_len + <span class="string">b'\r\n\r\n'</span> + data</span><br><span class="line">    <span class="keyword">return</span> msg</span><br></pre></td></tr></table></figure></p>
+<p>去头（在远端服务器这一函数也可被命名为<strong>readfromlocal</strong>，其函数内容相同）：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">readfromremote</span><span class="params">(self)</span>:</span></span><br><span class="line">    n = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> (n &lt; <span class="number">7</span>):</span><br><span class="line">        line = <span class="keyword">await</span> self._reader.readuntil(<span class="string">b'\r\n'</span>)</span><br><span class="line">        n = n + <span class="number">1</span></span><br><span class="line">    line  = <span class="keyword">await</span> self._reader.readuntil(<span class="string">b'\r\n\r\n'</span>)</span><br><span class="line">    <span class="keyword">if</span> line.split(<span class="string">b':'</span>)[<span class="number">0</span>] == <span class="string">b'Content-Length'</span>:</span><br><span class="line">        b_length = (line.split(<span class="string">b':'</span>)[<span class="number">1</span>])[<span class="number">0</span>: <span class="number">-4</span>]</span><br><span class="line">        length = int.from_bytes(b_length, byteorder = <span class="string">'little'</span>)</span><br><span class="line">        msg = <span class="keyword">await</span> self._reader.readexactly(length)</span><br><span class="line">        <span class="keyword">return</span> msg</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">None</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="完整代码："><a href="#完整代码：" class="headerlink" title="完整代码："></a>完整代码：</h2><p><a href="https://github.com/sXy98713/masqsocks" target="_blank" rel="noopener">https://github.com/sXy98713/masqsocks</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/12/leetcode-32/" rel="next" title="[leetcode-32]">
+                <i class="fa fa-chevron-left"></i> [leetcode-32]
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/timg.jpeg" alt="sXy">
+            
+              <p class="site-author-name" itemprop="name">sXy</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sXy98713" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基于asyncio的socks代理（网路工程大作业）"><span class="nav-number">1.</span> <span class="nav-text">基于asyncio的socks代理（网路工程大作业）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目"><span class="nav-number">1.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作业思路"><span class="nav-number">1.2.</span> <span class="nav-text">作业思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#asyncio"><span class="nav-number">1.2.1.</span> <span class="nav-text">asyncio</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Socks5协议"><span class="nav-number">1.2.2.</span> <span class="nav-text">Socks5协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于代理"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">关于代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#协议流程"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">协议流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、认证"><span class="nav-number">1.2.2.2.1.</span> <span class="nav-text">1、认证</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#认证方法："><span class="nav-number">1.2.2.2.1.1.</span> <span class="nav-text">认证方法：</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2、请求信息"><span class="nav-number">1.2.2.2.2.</span> <span class="nav-text">2、请求信息</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Socks5协议在本作业中的应用"><span class="nav-number">1.2.3.</span> <span class="nav-text">Socks5协议在本作业中的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP伪装"><span class="nav-number">1.2.4.</span> <span class="nav-text">HTTP伪装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完整代码："><span class="nav-number">1.3.</span> <span class="nav-text">完整代码：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sXy</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
