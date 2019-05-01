@@ -99,7 +99,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/04/28/Masqsocks/选区_075.png">
 <meta property="og:image" content="http://yoursite.com/2019/04/28/Masqsocks/选区_078.png">
-<meta property="og:updated_time" content="2019-04-28T08:17:41.968Z">
+<meta property="og:updated_time" content="2019-05-01T15:44:01.549Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Masqsocks">
 <meta name="twitter:description" content="基于asyncio的socks代理（网路工程大作业）题目 作业思路&amp;#160;&amp;#160;&amp;#160;&amp;#160;根据题目，需要先去了解Socks5协议以及asyncio。 asyncio参考官方文档:https://docs.python.org/3/library/asyncio-stream.html Socks5协议Socks5协议是一个代理协议，旨在为位于Intranet防火墙后的用户提">
@@ -396,7 +396,31 @@
 </tbody>
 </table>
 </div>
-<h5 id="2、请求信息"><a href="#2、请求信息" class="headerlink" title="2、请求信息"></a>2、请求信息</h5><p>2.1、客户端 -&gt; 代理服务器，发送目标信息：<br>版本号(1字节) | 命令(1字节) | 保留(1字节) | 请求类型(1字节) | 地址(不定长) | 端口(2字节)<br>—-         | —-        | —-        | —-           |  —-       | —-<br>固定为５　　 | 0x01: CONNECT<br>0x02: BIND<br>0x03:UDP ASSOCIATE | 固定为0x00 | 0x01: IPV4地址<br>0x03: 域名<br>0x04: IPV6地址| 若请求类型是域名，第１个字节为域名长度 |</p>
+<h5 id="2、请求信息"><a href="#2、请求信息" class="headerlink" title="2、请求信息"></a>2、请求信息</h5><p>2.1、客户端 -&gt; 代理服务器，发送目标信息：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>版本号(1字节)</th>
+<th>命令(1字节)</th>
+<th>保留(1字节)</th>
+<th>请求类型(1字节)</th>
+<th>地址(不定长)</th>
+<th>端口(2字节)  </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>固定为５</td>
+<td>0x01: CONNECT<br>0x02: BIND<br>0x03:UDP ASSOCIATE</td>
+<td>固定为0x00</td>
+<td>0x01: IPV4地址<br>0x03: 域名<br>0x04: IPV6地址</td>
+<td>若请求类型是域名，第１个字节为域名长度</td>
+<td>目的端口号</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>其中：</p>
 <ul>
 <li>CONNECT: 用于客户端请求服务器进行代理</li>
@@ -490,6 +514,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/04/28/masqsocks/" rel="prev" title="masqsocks——基于asyncio实现的socks代理">
+                masqsocks——基于asyncio实现的socks代理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -567,7 +595,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
